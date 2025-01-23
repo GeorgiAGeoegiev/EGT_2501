@@ -1,9 +1,16 @@
-Notes: 
+## Notes: 
 
+### How to setup
 Docker command to start with running Docker Container:
 `docker-compose build --no-cache` - builds the image from the Dockerfile
 `docker-compose up` - runs everything, including the service, redis, rabbitmq and postgres
 
+### How to run tests
+`./mvnw -Dtest=SpringBootTestWithTestContainers test`
+
+NB: Unit tests are written with @TestContainers, and therefore need running Docker
+
+### Example Requests
 Sample Postman request:
 `curl --location 'http://localhost:8080/json_api/current' \
 --header 'Content-Type: application/json' \
@@ -37,5 +44,3 @@ Sample Postman request:
         <currency>EUR</currency>
     </get>
 </command>'` - XML API current request 
-
-NB: Unit tests are written with @TestContainers, and therefore need running Docker
