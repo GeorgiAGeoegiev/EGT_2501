@@ -1,0 +1,54 @@
+version: "1.0.0"
+services:
+  redis:
+    image: redis:7.4.2-alpine
+    container_name: "redis"
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis:/redisData
+    networks:
+      - local-net
+  postgres:
+    image: postgres:17.2
+    container_name: "postgres"
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: username # The PostgreSQL user (useful to connect to the database)
+      POSTGRES_PASSWORD: password # The PostgreSQL password (useful to connect to the database)
+      POSTGRES_DB: default_database # The PostgreSQL default database (automatically created at first launch)
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    networks:
+      - local-net
+  rabbitmq:
+    image: rabbitmq:4.0.5
+    container_name: 'rabbitmq'
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq/
+      - rabbitmq:/var/log/rabbitmq
+    networks:
+      - local-net
+  gateway:
+    image: egt/gateway
+    ports:
+      - 8080:8080
+    build:
+      dockerfile: ./Dockerfile
+    networks:
+      - local-net
+volumes:
+  redis:
+    driver: local
+  postgres:
+    driver: local
+  rabbitmq:
+    driver: local
+
+networks:
+  local-net:
+    driver: bridge
